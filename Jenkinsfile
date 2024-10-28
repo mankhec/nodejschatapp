@@ -6,6 +6,20 @@ node('ubuntu-Appserver')
         checkout scm
     }
 
+    stage('SCA-SAST-SNYK-TEST')
+    {
+        agent
+        {
+            label 'ubuntu-Appserver'
+        }
+
+        snykSecurity(
+            snykInstallation: 'Snyk',
+            snykTokenId: 'Snykid',
+            severity: 'critical'
+        )
+    }
+
     stage('Build-and-Tag')
     {
         app = docker.build('kevenmang/index')
